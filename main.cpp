@@ -6,24 +6,30 @@
 int main() {
   TaskQueue pool(4);
 
-  // Example usage
-  pool.enqueue([] {
-    Logger::log("Task 1 is running on thread ", std::this_thread::get_id());
-  });
-
-  pool.enqueue([] {
-    Logger::log("Task 2: Computing result...");
+  // Task 1: Simple computation (returns int)
+  auto f1 = pool.enqueue([] {
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    Logger::log("Task 2 done.");
+    return 42;
   });
 
-  // You can still return values too
-  auto f = pool.enqueue([] {
-    Logger::log("Task 3 running");
-    return 123;
+  // Task 2: String concatenation (returns std::string)
+  auto f2 = pool.enqueue([] { return std::string("Hello from task 2"); });
+
+  // Task 3: Print message (void return)
+  pool.enqueue([] { Logger::log("Task 3: Doing some logging..."); });
+
+  // Task 4: Heavy computation
+  auto f4 = pool.enqueue([] {
+    long sum = 0;
+    for (int i = 0; i < 1e6; ++i)
+      sum += i;
+    return sum;
   });
 
-  Logger::log("Task 3 result: ", f.get());
+  // Collect results
+  Logger::log("Task 1 result: ", f1.get());
+  Logger::log("Task 2 result: ", f2.get());
+  Logger::log("Task 4 result: ", f4.get());
 
   return 0;
 }
