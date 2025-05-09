@@ -35,6 +35,8 @@ TaskQueue::~TaskQueue() {
   condition.notify_all();
 
   for (std::thread &worker : workers) {
-    worker.join();
+    if (worker.joinable()) {
+      worker.join();
+    }
   }
 }
