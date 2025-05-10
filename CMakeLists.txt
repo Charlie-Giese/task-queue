@@ -4,6 +4,10 @@ project(TaskQueue)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# enable testing
+include(CTest)
+enable_testing()
+
 # Add the library target
 add_library(task_queue
     src/task_queue.cpp
@@ -17,17 +21,37 @@ add_library(logger
 
 target_include_directories(task_queue PUBLIC include)
 
+# GoogleTest integration
+include(FetchContent)
+FetchContent_Declare(
+    googletest
+    DOWNLOAD_EXTRACT_TIMESTAMP true
+    URL https://github.com/google/googletest/archive/refs/tags/release-1.12.1.zip
+)
+
+FetchContent_MakeAvailable(googletest)
+
+# Test executable
+add_executable(task_queue_tests
+    tests/test_task_queue.cpp
+)
+
 # add executable target for testing
 add_executable(main
     main.cpp
 )
 
 target_link_libraries(main PRIVATE task_queue pthread logger)
+target_link_libraries(task_queue_tests PRIVATE task_queue gtest_main)
+
+include(GoogleTest)
+gtest_discover_tests(task_queue_tests)
 
 # Enable all warnings
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(task_queue PRIVATE -Wall -Wextra -pedantic -Werror)
     target_compile_options(logger PRIVATE -Wall -Wextra -pedantic -Werror)
     target_compile_options(main PRIVATE -Wall -Wextra -pedantic -Werror)
+    target_compile_options(task_queue_tests PRIVATE -Wall -Wextra -pedantic -Werror)
 endif()
 
