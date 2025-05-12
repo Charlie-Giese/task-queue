@@ -30,8 +30,6 @@ private:
   std::mutex queue_mutex;
   std::condition_variable condition;
   std::atomic<bool> stop = false;
-
-  void worker_loop();
 };
 
 template <typename Func, typename... Args>
