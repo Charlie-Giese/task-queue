@@ -26,4 +26,18 @@ git clone https://github.com/Charlie-Giese/task-queue.git
 cd task-queue
 mkdir build && cd build
 cmake ..
-make
+make```
+
+### Running Tests
+
+You can run tests using ctest.
+
+### Usage
+
+```c++
+TaskQueue queue(4);
+queue.enqueue([]() {
+    std::cout << "Task executed." << std::endl;
+})
+```
+
