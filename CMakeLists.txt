@@ -40,6 +40,17 @@ add_executable(main
 
 target_link_libraries(main PRIVATE task_queue pthread logger)
 
+# benchmarking
+add_executable(throughput_benchmark benchmark/throughput_benchmark.cpp)
+add_executable(latency_benchmark benchmark/latency_benchmark.cpp)
+add_executable(scalability_benchmark benchmark/scalability_benchmark.cpp)
+add_executable(overhead_benchmark benchmark/overhead_benchmark.cpp)
+
+target_link_libraries(throughput_benchmark PRIVATE task_queue)
+target_link_libraries(latency_benchmark PRIVATE task_queue)
+target_link_libraries(scalability_benchmark PRIVATE task_queue)
+target_link_libraries(overhead_benchmark PRIVATE task_queue)
+
 
 # Enable all warnings
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
