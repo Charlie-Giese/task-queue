@@ -4,6 +4,7 @@
 #include <gtest/gtest.h>
 #include <thread>
 
+// Ensure enqueue method works properly
 TEST(TaskQueueTest, EnqueuesAndExecutesTask) {
   TaskQueue queue(4);
   std::atomic<bool> flag{false};
@@ -14,6 +15,7 @@ TEST(TaskQueueTest, EnqueuesAndExecutesTask) {
   EXPECT_TRUE(flag);
 }
 
+// Ensure that tasks are completed in the correct order (1 thread)
 TEST(TaskQueueTest, QueueOrder) {
 
   TaskQueue queue(1);

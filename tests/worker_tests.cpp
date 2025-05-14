@@ -6,6 +6,7 @@
 #include <thread>
 #include <vector>
 
+// Ensure queue can handle multiple tasks cleanly
 TEST(TaskQueueTest, HandlesMultipleTasks) {
   TaskQueue queue(10);
   std::atomic<int> sum{0};
@@ -18,6 +19,7 @@ TEST(TaskQueueTest, HandlesMultipleTasks) {
   EXPECT_EQ(sum, 15); // 1 + 2 + 3 + 4 + 5
 }
 
+// Ensure thread safety, count over multiple tasks from multiple numThreads
 TEST(TaskQueueTest, ThreadSafety) {
   std::vector<std::thread> threads;
 
@@ -44,6 +46,7 @@ TEST(TaskQueueTest, ThreadSafety) {
   EXPECT_EQ(counter.load(), numThreads * tasksPerThread);
 }
 
+// Ensure graceful completion of tasks after shutdown
 TEST(TaskQueueTest, GracefulShutdown) {
   std::atomic<int> sum{0};
   std::promise<void> done;
@@ -68,6 +71,7 @@ TEST(TaskQueueTest, GracefulShutdown) {
   EXPECT_EQ(sum.load(), 15);
 }
 
+// Ensure thread exception doesn't block queue
 TEST(TaskQueueTest, HandlesExceptionsGracefully) {
   std::atomic<bool> exception_caught{false};
   std::atomic<bool> continued_execution{false};
