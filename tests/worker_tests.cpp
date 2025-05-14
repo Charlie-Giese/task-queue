@@ -21,12 +21,12 @@ TEST(TaskQueueTest, HandlesMultipleTasks) {
 TEST(TaskQueueTest, ThreadSafety) {
   std::vector<std::thread> threads;
 
-  int numThreads = 10;
-  int tasksPerThread = 10;
+  int numThreads = 4;
+  int tasksPerThread = 100;
 
   std::atomic<int> counter{0};
 
-  TaskQueue queue(numThreads * tasksPerThread);
+  TaskQueue queue(numThreads);
 
   for (int i = 0; i < numThreads; i++) {
     threads.emplace_back([&]() {
